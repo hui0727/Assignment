@@ -5,7 +5,7 @@ import time
 client = mqtt.Client()
 client.connect("localhost", 1883)
 
-battery = 100  # Initial battery level
+battery = 100     # Initial battery level
 last_airq = None  # Initialize last_airq
 warning_msg = ""  # Initialize warning_msg
 
@@ -19,7 +19,7 @@ def on_message(client, userdata, message):
         battery = message.payload.decode()
         if "CRITICAL battery level" in battery or "Replace battery immediately" in battery:
             warning_msg = f"\n\t{battery}"
-            print(warning_msg)
+            # print(warning_msg) 
 
 client.on_message = on_message
 client.subscribe("public/airq")
@@ -38,13 +38,18 @@ while battery > 0:  # Only publish temperature readings if battery > 0
     
     client.publish("public/temp", "Temperature: {:.2f}°C".format(temperature))
     if last_airq is not None:  # Make sure last_airq is not None before publishing
-        client.publish("public/data", f"Temperature: {temperature}, Air Quality: {last_airq} ppm")  # Include the unit of measurement
+        client.publish("public/data", f"Temperature: {temperature:2f}, Air Quality: {last_airq} ppm")  # Include the unit of measurement
+
     time.sleep(5)  # Sleep for 5 seconds
 
 if battery <= 0:
-    warning_msg = "\n\tBattery level: Replace battery immediately"
+    warning_msg = "\n\tBattery level low.. Replace battery immediately!"
     client.publish("102775313/temp/battery",f"Battery level: {battery}%\n {warning_msg}")
-    print(warning_msg)
+    # print(warning_msg)
+    client.publish("public/shutdown", "System down")
+    print("No battery...System down")
+    print()
+    
     time.sleep(5)
 
 client.loop_stop()

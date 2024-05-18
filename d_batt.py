@@ -1,4 +1,6 @@
 import paho.mqtt.client as mqtt
+import sys
+import time
 
 # Create a client instance
 client = mqtt.Client()
@@ -20,6 +22,11 @@ def on_message(client, userdata, msg):
         elif battery_level == 0:
             warning_msg = "\n\tBattery level: Replace battery immediately"
             client.publish("102775313/temp/battery", "Replace battery immediately")
+            print("No battery...System down")
+            print()
+            client.loop_stop()
+            time.sleep(5)
+            sys.exit()
         else:
             warning_msg = f"\n\tBattery Level: {battery_level}%\n"
         print(warning_msg)
