@@ -34,7 +34,7 @@ while battery > 0:  # Only publish temperature readings if battery > 0
     client.publish("102775313/temp/battery", f"Battery Level: {battery}%")
     # Decrement battery level by 10 every 30 seconds
     battery -= 10
-    time.sleep(1)
+    time.sleep(8)
     
     client.publish("public/temp", "Temperature: {:.2f}°C".format(temperature))
     if last_airq is not None:  # Make sure last_airq is not None before publishing
