@@ -2,9 +2,17 @@ import paho.mqtt.client as mqtt
 import sys
 import time
 
+# MQTT Broker settings
+broker = "192.168.12.100"
+# broker = "localhost"
+port = 1883
+username = "102775313"  # Replace with your student ID
+password = "102775313"  # Replace with your student ID
+
 # Create a client instance
 client = mqtt.Client()
-client.connect("localhost", 1883, 60)
+client.username_pw_set(username, password)
+client.connect(broker, port)
 
 client.subscribe("102775313/temp/battery")
 

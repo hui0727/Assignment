@@ -1,8 +1,18 @@
 import paho.mqtt.client as mqtt
 import time
 
+# MQTT Broker settings
+broker = "192.168.12.100"
+# broker = "localhost"
+port = 1883
+username = "102775313"  
+password = "102775313"  
+
+# client = mqtt.Client()
+# client.connect("localhost", 1883)
 client = mqtt.Client()
-client.connect("localhost", 1883)
+client.username_pw_set(username, password)
+client.connect(broker, port)
 
 client.subscribe("public/temperature")
 client.subscribe("public/airq")

@@ -2,8 +2,15 @@ import paho.mqtt.client as mqtt
 import random
 import time
 
-client = mqtt.Client()
-client.connect("localhost", 1883)
+# MQTT Broker settings
+broker = "192.168.12.100"
+# broker = "localhost"
+port = 1883
+username = "102775313"  
+password = "102775313"  
+
+# client = mqtt.Client()
+# client.connect("localhost", 1883)
 
 status = "running"  # Initialize system status
 last_temp = None
@@ -20,6 +27,10 @@ def on_message(client, userdata, message):
             print()
             status = "down"  # Update system status
             client.loop_stop()
+
+client = mqtt.Client()
+client.username_pw_set(username, password)
+client.connect(broker, port)
 
 client.on_message = on_message
 client.subscribe("public/temp")
